@@ -3,8 +3,11 @@ package com.lfo.partynonsense;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,5 +27,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_main);
         }
+
+        setContentView(R.layout.activity_main);
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                change();
+            }
+        });
+    }
+
+    private void change(){
+        Intent intent = new Intent(this,GameActivity.class);
+        intent.putExtra("nbrOfPlayers", 3); //TODO Get value from dropdown
+        startActivity(intent);
     }
 }
