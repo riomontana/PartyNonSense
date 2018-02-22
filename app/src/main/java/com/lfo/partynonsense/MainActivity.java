@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void change(){
         Intent intent = new Intent(this,GameActivity.class);
+        intent.putExtra("nbrOfPlayers", 3); //TODO Get value from dropdown
         startActivity(intent);
 
     }
