@@ -7,13 +7,14 @@
     tools:context="com.lfo.partynonsense.GameActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -22,8 +23,8 @@
             android:layout_height="43dp"
             android:layout_weight="1"
             android:text="Player"
-            android:textColor="@android:color/white"
             android:textAlignment="center"
+            android:textColor="@android:color/white"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="280dp"
             tools:layout_editor_absoluteY="258dp" />
@@ -36,8 +37,8 @@
             android:layout_row="0"
             android:layout_weight="1"
             android:text="SS:ss"
-            android:textColor="@android:color/white"
             android:textAlignment="center"
+            android:textColor="@android:color/white"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="38dp"
             tools:layout_editor_absoluteY="207dp" />
@@ -48,12 +49,23 @@
             android:layout_height="43dp"
             android:layout_weight="1"
             android:text="1000 p"
-            android:textColor="@android:color/white"
             android:textAlignment="center"
+            android:textColor="@android:color/white"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="280dp"
             tools:layout_editor_absoluteY="258dp" />
 
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.lfo.partynonsense.RotateGameFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </android.support.constraint.ConstraintLayout>
