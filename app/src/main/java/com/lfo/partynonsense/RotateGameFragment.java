@@ -18,6 +18,7 @@ public class RotateGameFragment extends Fragment {
     private GameActivity gameActivity;
     private TextView textView;
     private View view;
+    private String blablabla;
 
     public RotateGameFragment() {
         // Required empty public constructor
@@ -28,6 +29,7 @@ public class RotateGameFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rotate_game, container, false);
         textView = (TextView) view.findViewById(R.id.textView2);
+        textView.setText(blablabla);
         Button button = (Button) view.findViewById(R.id.btnChange);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +43,7 @@ public class RotateGameFragment extends Fragment {
     }
 
     public void setText(String game) {
-
+        this.blablabla=game;
 //        textView.setText("Detta är spel : " + game);
     }
 }

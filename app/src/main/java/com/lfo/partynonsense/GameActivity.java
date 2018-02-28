@@ -1,6 +1,7 @@
 package com.lfo.partynonsense;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -102,25 +103,25 @@ public class GameActivity extends AppCompatActivity {
                 case ROTATE_GAME:
                     Log.d("LOG", "changeGame: ROTATE GAME");
                     RotateGameFragment fragment = new RotateGameFragment();
-                    setFragment(fragment);
+                    setFragment(fragment, "rotate");
                     fragment.setText("Roatate Game");
                     break;
                 case WHACK_A_MOLE_GAME:
                     Log.d("LOG", "changeGame: WHACK A MOLE");
                     RotateGameFragment fragment2 = new RotateGameFragment();
-                    setFragment(fragment2);
+                    setFragment(fragment2, "mole");
                     fragment2.setText("Whack A Mole Game");
                     break;
                 case CONNECTING_DOTS_GAME:
                     Log.d("LOG", "changeGame: CONNECTING DOTS");
                     RotateGameFragment fragment3 = new RotateGameFragment();
-                    setFragment(fragment3);
+                    setFragment(fragment3, "dots");
                     fragment3.setText("Connecting Dots Game");
                     break;
                 case SOUND_SENSOR_GAME:
                     Log.d("LOG", "changeGame: SOUND SENSOR");
                     RotateGameFragment fragment4 = new RotateGameFragment();
-                    setFragment(fragment4);
+                    setFragment(fragment4, "sound");
                     fragment4.setText("Sound Sensor Game");
                     break;
             }
@@ -130,9 +131,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    public void setFragment(Fragment fragment) {
+    public void setFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, fragment);
+        fragmentTransaction.replace(R.id.fragment, fragment, tag);
         fragmentTransaction.commit();
     }
 
