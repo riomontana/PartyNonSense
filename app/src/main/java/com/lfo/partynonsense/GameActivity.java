@@ -2,7 +2,6 @@ package com.lfo.partynonsense;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -121,7 +118,9 @@ public class GameActivity extends AppCompatActivity {
                     args.putString("gameName", gameName);
                     Log.d("LOG", "changeGame: " + gameName);
                     RotateGameFragment fragment = new RotateGameFragment();
-                    setFragment(fragment);
+                    setFragment(fragment, "rotate");
+                    fragment.setText("Roatate Game");
+                    setFragment(fragment, "ROTATE_GAME");
                     fragment.setText(gameName);
                     DialogFragment dialogFragment = new GameInfoAlertDialogFragment();
                     dialogFragment.setArguments(args);
@@ -132,7 +131,9 @@ public class GameActivity extends AppCompatActivity {
                     args.putString("gameName", gameName);
                     Log.d("LOG", "changeGame: " + gameName);
                     RotateGameFragment fragment2 = new RotateGameFragment();
-                    setFragment(fragment2);
+                    setFragment(fragment2, "mole");
+                    fragment2.setText("Whack A Mole Game");
+                    setFragment(fragment2, "WHACK_A_MOLE_GAME");
                     fragment2.setText(gameName);
                     DialogFragment dialogFragment2 = new GameInfoAlertDialogFragment();
                     dialogFragment2.setArguments(args);
@@ -143,7 +144,9 @@ public class GameActivity extends AppCompatActivity {
                     args.putString("gameName", gameName);
                     Log.d("LOG", "changeGame: " + gameName);
                     RotateGameFragment fragment3 = new RotateGameFragment();
-                    setFragment(fragment3);
+                    setFragment(fragment3, "dots");
+                    fragment3.setText("Connecting Dots Game");
+                    setFragment(fragment3, "CONNECTING_DOTS_GAME");
                     fragment3.setText(gameName);
                     DialogFragment dialogFragment3 = new GameInfoAlertDialogFragment();
                     dialogFragment3.setArguments(args);
@@ -154,7 +157,9 @@ public class GameActivity extends AppCompatActivity {
                     args.putString("gameName", gameName);
                     Log.d("LOG", "changeGame: " + gameName);
                     RotateGameFragment fragment4 = new RotateGameFragment();
-                    setFragment(fragment4);
+                    setFragment(fragment4, "sound");
+                    fragment4.setText("Sound Sensor Game");
+                    setFragment(fragment4, "SOUND_SENSOR_GAME");
                     fragment4.setText(gameName);
                     DialogFragment dialogFragment4 = new GameInfoAlertDialogFragment();
                     dialogFragment4.setArguments(args);
@@ -183,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    public void setFragment(Fragment fragment) {
+    public void setFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment, fragment);
         fragmentTransaction.commit();
