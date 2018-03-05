@@ -129,7 +129,6 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-
     public void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment, fragment);
