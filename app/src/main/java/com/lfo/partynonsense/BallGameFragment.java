@@ -5,6 +5,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     private SensorManager sensorManager;
     private Sensor sensor;
     private BallGameSensorListener sensorListener;
-
+    private ConstraintLayout ballLayout;
     private ImageView goalIv;
     private ImageView playerIv;
     private Integer score;
@@ -45,6 +46,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         View v = inflater.inflate(R.layout.fragment_ball_game, container, false);
         playerIv = (ImageView) v.findViewById(R.id.imageView);
         goalIv = (ImageView) v.findViewById(R.id.imageView2);
+        ballLayout = v.findViewById(R.id.ballLayout);
         sensorManager = (SensorManager)getActivity().getSystemService
                 (Context.SENSOR_SERVICE );
         if(sensorManager.getDefaultSensor
@@ -52,7 +54,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
 
-        sensorListener = new BallGameSensorListener(playerIv, goalIv);
+        sensorListener = new BallGameSensorListener(playerIv, goalIv, ballLayout);
         score = 0;
         return v;
     }

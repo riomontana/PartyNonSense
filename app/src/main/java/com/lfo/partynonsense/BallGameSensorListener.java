@@ -3,6 +3,8 @@ package com.lfo.partynonsense;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.support.constraint.ConstraintLayout;
+import android.text.Layout;
 import android.widget.ImageView;
 
 import java.util.Random;
@@ -16,25 +18,20 @@ public class BallGameSensorListener implements SensorEventListener {
     private ImageView goalIv;
     private float xVel;
     private float yVel;
+    private float goalX;
+    private float goalY;
     private int currentGoal;
-    private float[][] list;
     private int score;
-
-    public BallGameSensorListener(ImageView playerIv, ImageView goalIv){
+    private ConstraintLayout layout;
+    public BallGameSensorListener(ImageView playerIv, ImageView goalIv, ConstraintLayout layout){
         this.playerIv = playerIv;
         this.goalIv = goalIv;
+        this.layout = layout;
         xVel = 0;
         yVel = 0;
         score = 0;
-        list = new float[4][2];
-        list[0][0] = 100;
-        list[0][1] = 100;
-        list[1][0] = 100;
-        list[1][1] = 800;
-        list[2][0] = 1400;
-        list[2][1] = 100;
-        list[3][0] = 1400;
-        list[3][1] = 800;
+        goalX = 200;
+        goalY = 200;
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -52,23 +49,24 @@ public class BallGameSensorListener implements SensorEventListener {
     private void moveBall(float x, float y){
         float newXPos = playerIv.getX() - x/2;
         float newYPos = playerIv.getY () + y/2;
-        if(newXPos > 0 && newXPos < 900){
+        if(newXPos > 0 && newXPos < layout.getWidth() - playerIv.getWidth()){
             playerIv.setX(newXPos);
         }else{
-            xVel = 0;
+            score --;
+            xVel = (xVel * -1) / 2;
         }
-        if(newYPos > 0 && newYPos < 1500){
+        if(newYPos > 0 && newYPos < layout.getHeight() - playerIv.getHeight()){
             playerIv.setY(newYPos);
         }else{
-            yVel = 0;
+            score --;
+            yVel = (yVel * -1) / 2;
         }
-        float xDiff = newXPos - list[currentGoal][1];
-        float yDiff = newYPos - list[currentGoal][0];
+        float xDiff = newXPos - goalX;
+        float yDiff = newYPos - goalY;
         updateGoal();
-        if(xDiff > -150 && xDiff < 50 && yDiff < 50 && yDiff > -150){
+        if(xDiff > - playerIv.getWidth()+30 && xDiff < goalIv.getWidth()-30 && yDiff < goalIv.getHeight()-30 && yDiff > - playerIv.getHeight()+30){
             score ++;
-            Random ran = new Random();
-            currentGoal = ran.nextInt(4);
+            newGoal();
             updateGoal();
         }
 
@@ -78,8 +76,18 @@ public class BallGameSensorListener implements SensorEventListener {
         return score;
     }
     private int updateGoal(){
-        goalIv.setY(list[currentGoal][0]);
-        goalIv.setX(list[currentGoal][1]);
+        goalIv.setY(goalY);
+        goalIv.setX(goalX);
         return currentGoal;
+    }
+    private void newGoal(){
+        Random ran = new Random();
+        goalX = ran.nextInt((int) layout.getWidth()-300) + 150;
+        goalY = ran.nextInt((int) layout.getHeight() - 300) + 150;
+        float xDiff = playerIv.getX() - goalX;
+        float yDiff = playerIv.getY() - goalY;
+        if(xDiff > - playerIv.getWidth()+30 && xDiff < goalIv.getWidth()-30 && yDiff < goalIv.getHeight()-30 && yDiff > - playerIv.getHeight()+30){
+            newGoal();
+        }
     }
 }
