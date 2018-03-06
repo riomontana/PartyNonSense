@@ -1,5 +1,6 @@
 package com.lfo.partynonsense.activitys;
 
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.lfo.partynonsense.R;
+
 /**
  * Edited by Linus Forsberg
  * Added permission checks
