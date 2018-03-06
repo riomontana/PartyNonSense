@@ -1,33 +1,33 @@
-package com.lfo.partynonsense;
+package com.lfo.partynonsense.fragments;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.lfo.partynonsense.activitys.GameActivity;
+import com.lfo.partynonsense.R;
 
 
-public class RotateGameFragment extends Fragment {
+public class TestFragment extends Fragment {
 
     private GameActivity gameActivity;
     private TextView textView;
     private View view;
     private String blablabla;
 
-    public RotateGameFragment() {
+    public TestFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_rotate_game, container, false);
+        view = inflater.inflate(R.layout.fragment_test, container, false);
         textView = (TextView) view.findViewById(R.id.textView2);
         textView.setText(blablabla);
         Button button = (Button) view.findViewById(R.id.btnChange);

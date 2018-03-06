@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lfo.partynonsense.DummyFragmentActivity">
+    tools:context="com.lfo.partynonsense.fragments.DummyFragmentActivity">
 
     <fragment
         android:id="@+id/dbMeterFragment"
-        android:name="com.lfo.partynonsense.DBMeterFragment"
+        android:name="com.lfo.partynonsense.fragments.DBMeterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_dbmeter" />

@@ -1,4 +1,4 @@
-package com.lfo.partynonsense;
+package com.lfo.partynonsense.activitys;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -10,6 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.lfo.partynonsense.GameInfoAlertDialogFragment;
+import com.lfo.partynonsense.R;
+import com.lfo.partynonsense.fragments.RotateGameFragment;
+import com.lfo.partynonsense.fragments.TestFragment;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -105,64 +111,49 @@ public class GameActivity extends AppCompatActivity {
 
     public void changeGame() {
         clockTimer.setText("Get ready!");
-        Bundle args = new Bundle();
+        Bundle bundle = new Bundle();
         String gameName;
 
         if (currentGame < GAMES_TO_PLAY) {
             currentGame++;
-            Log.d("LOG", "current Player: " + currentPlayer);
-            Log.d("LOG", "current game: " + currentGame);
             switch (gameFragmentsList.get(currentGame - 1)) {
                 case ROTATE_GAME:
                     gameName = "ROTATE GAME";
-                    args.putString("gameName", gameName);
-                    Log.d("LOG", "changeGame: " + gameName);
+                    bundle.putString("gameName", gameName);
                     RotateGameFragment fragment = new RotateGameFragment();
-                    setFragment(fragment, "rotate");
-                    fragment.setText("Roatate Game");
-                    setFragment(fragment, "ROTATE_GAME");
-                    fragment.setText(gameName);
+                    setFragment(fragment,"ROTATE_GAME");
                     DialogFragment dialogFragment = new GameInfoAlertDialogFragment();
-                    dialogFragment.setArguments(args);
+                    dialogFragment.setArguments(bundle);
                     dialogFragment.show(getFragmentManager(), gameName);
                     break;
                 case WHACK_A_MOLE_GAME:
                     gameName = "WHACK A MOLE";
-                    args.putString("gameName", gameName);
-                    Log.d("LOG", "changeGame: " + gameName);
-                    RotateGameFragment fragment2 = new RotateGameFragment();
-                    setFragment(fragment2, "mole");
-                    fragment2.setText("Whack A Mole Game");
+                    bundle.putString("gameName", gameName);
+                    TestFragment fragment2 = new TestFragment();
                     setFragment(fragment2, "WHACK_A_MOLE_GAME");
                     fragment2.setText(gameName);
                     DialogFragment dialogFragment2 = new GameInfoAlertDialogFragment();
-                    dialogFragment2.setArguments(args);
+                    dialogFragment2.setArguments(bundle);
                     dialogFragment2.show(getFragmentManager(), gameName);
                     break;
                 case CONNECTING_DOTS_GAME:
                     gameName = "CONNECTING DOTS";
-                    args.putString("gameName", gameName);
-                    Log.d("LOG", "changeGame: " + gameName);
-                    RotateGameFragment fragment3 = new RotateGameFragment();
-                    setFragment(fragment3, "dots");
-                    fragment3.setText("Connecting Dots Game");
+                    bundle.putString("gameName", gameName);
+                    TestFragment fragment3 = new TestFragment();
                     setFragment(fragment3, "CONNECTING_DOTS_GAME");
                     fragment3.setText(gameName);
                     DialogFragment dialogFragment3 = new GameInfoAlertDialogFragment();
-                    dialogFragment3.setArguments(args);
+                    dialogFragment3.setArguments(bundle);
                     dialogFragment3.show(getFragmentManager(), gameName);
                     break;
                 case SOUND_SENSOR_GAME:
                     gameName = "SOUND GAME";
-                    args.putString("gameName", gameName);
-                    Log.d("LOG", "changeGame: " + gameName);
-                    RotateGameFragment fragment4 = new RotateGameFragment();
-                    setFragment(fragment4, "sound");
-                    fragment4.setText("Sound Sensor Game");
+                    bundle.putString("gameName", gameName);
+                    TestFragment fragment4 = new TestFragment();
                     setFragment(fragment4, "SOUND_SENSOR_GAME");
                     fragment4.setText(gameName);
                     DialogFragment dialogFragment4 = new GameInfoAlertDialogFragment();
-                    dialogFragment4.setArguments(args);
+                    dialogFragment4.setArguments(bundle);
                     dialogFragment4.show(getFragmentManager(), gameName);
                     break;
             }

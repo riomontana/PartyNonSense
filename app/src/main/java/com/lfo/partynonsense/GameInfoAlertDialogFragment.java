@@ -6,6 +6,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.lfo.partynonsense.activitys.GameActivity;
+
 /**
  * Displays info about current game before the game is started.
  *

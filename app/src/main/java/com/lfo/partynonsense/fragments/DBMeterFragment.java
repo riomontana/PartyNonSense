@@ -1,4 +1,4 @@
-package com.lfo.partynonsense;
+package com.lfo.partynonsense.fragments;
 
 
 import android.media.MediaRecorder;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.lfo.partynonsense.R;
 
 import java.io.IOException;
 
