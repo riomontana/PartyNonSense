@@ -1,4 +1,4 @@
-package com.lfo.partynonsense;
+package com.lfo.partynonsense.fragments;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.lfo.partynonsense.R;
 
 /**
  * TODO Remove this Activity when the time is right

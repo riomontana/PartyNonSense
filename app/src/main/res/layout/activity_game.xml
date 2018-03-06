@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lfo.partynonsense.GameActivity">
+    tools:context="com.lfo.partynonsense.activitys.GameActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.lfo.partynonsense.RotateGameFragment"
+        android:name="com.lfo.partynonsense.fragments.TestFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
