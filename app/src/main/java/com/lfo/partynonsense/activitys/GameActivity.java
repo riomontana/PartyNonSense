@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.lfo.partynonsense.AmplitudeGameFragment;
 import com.lfo.partynonsense.GameInfoAlertDialogFragment;
 import com.lfo.partynonsense.R;
 import com.lfo.partynonsense.fragments.RotateGameFragment;
@@ -149,9 +150,9 @@ public class GameActivity extends AppCompatActivity {
                 case SOUND_SENSOR_GAME:
                     gameName = "SOUND GAME";
                     bundle.putString("gameName", gameName);
-                    TestFragment fragment4 = new TestFragment();
+                    AmplitudeGameFragment fragment4 = new AmplitudeGameFragment();
                     setFragment(fragment4, "SOUND_SENSOR_GAME");
-                    fragment4.setText(gameName);
+//                    fragment4.setText(gameName);
                     DialogFragment dialogFragment4 = new GameInfoAlertDialogFragment();
                     dialogFragment4.setArguments(bundle);
                     dialogFragment4.show(getFragmentManager(), gameName);
@@ -162,7 +163,6 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    public void setFragment(Fragment fragment) {
     /**
      * Start count down timer and update user interface
      */
