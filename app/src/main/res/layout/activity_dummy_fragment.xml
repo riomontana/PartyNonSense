@@ -8,9 +8,9 @@
 
     <fragment
         android:id="@+id/dbMeterFragment"
-        android:name="com.lfo.partynonsense.DBMeterFragment"
+        android:name="com.lfo.partynonsense.AmplitudeGameFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_dbmeter" />
+        tools:layout="@layout/fragment_amplitude_game" />
 
 </android.support.constraint.ConstraintLayout>

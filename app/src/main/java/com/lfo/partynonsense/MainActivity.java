@@ -9,7 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Edited by Linus Forsberg
+ * Added permission checks
+ */
+
 public class MainActivity extends AppCompatActivity {
+
+    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +26,13 @@ public class MainActivity extends AppCompatActivity {
         // Check for permissions for microphone, sensors etc..
         // TODO add more permission-checks
         // If permission is not granted
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                || (ActivityCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED)) {
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.VIBRATE},
+                    REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
 
             // Permission OK!
-        } else {
-            setContentView(R.layout.activity_main);
         }
 
         setContentView(R.layout.activity_main);
@@ -40,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void change(){
-        Intent intent = new Intent(this,GameActivity.class);
+    private void change() {
+        Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("nbrOfPlayers", 3); //TODO Get value from dropdown
         startActivity(intent);
     }
