@@ -3,6 +3,7 @@
     package="com.lfo.partynonsense">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,17 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <activity android:name=".activitys.MainActivity"
             android:screenOrientation="portrait">
             <!--<activity android:name=".DummyFragmentActivity">-->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activitys.GameActivity"
-            android:screenOrientation="portrait"    ></activity>
+            android:screenOrientation="portrait"></activity>
+        <!--<activity android:name=".DummyDBActivity"></activity>-->
     </application>
 
 </manifest>
