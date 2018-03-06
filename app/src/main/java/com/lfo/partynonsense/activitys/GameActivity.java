@@ -162,6 +162,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    public void setFragment(Fragment fragment) {
     /**
      * Start count down timer and update user interface
      */

@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // Check for permissions for microphone, sensors etc..
         // TODO add more permission-checks
         // If permission is not granted
