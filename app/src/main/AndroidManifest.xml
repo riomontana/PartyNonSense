@@ -15,7 +15,6 @@
 
         <activity android:name=".activitys.MainActivity"
             android:screenOrientation="portrait">
-            <!--<activity android:name=".DummyFragmentActivity">-->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +25,6 @@
 
         <activity android:name=".activitys.GameActivity"
             android:screenOrientation="portrait"></activity>
-        <!--<activity android:name=".DummyDBActivity"></activity>-->
     </application>
 
 </manifest>

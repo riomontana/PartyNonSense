@@ -24,12 +24,11 @@ import java.util.LinkedHashMap;
 import java.util.Random;
 
 /**
- *
  * @author Jimmy Åkesson
- *
- * edited by Linus Forsberg
- * Added count down timer in StartCountDown method
- * Added functionality for Alert Dialog Fragment in changeGame method
+ *         <p>
+ *         edited by Linus Forsberg
+ *         Added count down timer in StartCountDown method
+ *         Added startGame and endGame methods.
  */
 
 public class GameActivity extends AppCompatActivity {
@@ -48,6 +47,10 @@ public class GameActivity extends AppCompatActivity {
     private int currentGame = 0;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private ArrayList<Integer> gameFragmentsList = new ArrayList<>();
+
+    private RotateGameFragment rotateGameFragment;
+    private AmplitudeGameFragment amplitudeGameFragment;
+    // todo lägg till WHACK A MOLE och CONNECTING DOTS som instansvariabler
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,55 +115,36 @@ public class GameActivity extends AppCompatActivity {
 
     public void changeGame() {
         clockTimer.setText("Get ready!");
-        Bundle bundle = new Bundle();
-        String gameName;
 
         if (currentGame < GAMES_TO_PLAY) {
             currentGame++;
             switch (gameFragmentsList.get(currentGame - 1)) {
                 case ROTATE_GAME:
-                    gameName = "ROTATE GAME";
-                    bundle.putString("gameName", gameName);
-                    RotateGameFragment fragment = new RotateGameFragment();
-                    setFragment(fragment,"ROTATE_GAME");
-                    DialogFragment dialogFragment = new GameInfoAlertDialogFragment();
-                    dialogFragment.setArguments(bundle);
-                    dialogFragment.show(getFragmentManager(), gameName);
+                    rotateGameFragment = new RotateGameFragment();
+                    setFragment(rotateGameFragment, "ROTATE_GAME");
                     break;
                 case WHACK_A_MOLE_GAME:
-                    gameName = "WHACK A MOLE";
-                    bundle.putString("gameName", gameName);
                     TestFragment fragment2 = new TestFragment();
                     setFragment(fragment2, "WHACK_A_MOLE_GAME");
-                    fragment2.setText(gameName);
-                    DialogFragment dialogFragment2 = new GameInfoAlertDialogFragment();
-                    dialogFragment2.setArguments(bundle);
-                    dialogFragment2.show(getFragmentManager(), gameName);
                     break;
                 case CONNECTING_DOTS_GAME:
-                    gameName = "CONNECTING DOTS";
-                    bundle.putString("gameName", gameName);
                     TestFragment fragment3 = new TestFragment();
                     setFragment(fragment3, "CONNECTING_DOTS_GAME");
-                    fragment3.setText(gameName);
-                    DialogFragment dialogFragment3 = new GameInfoAlertDialogFragment();
-                    dialogFragment3.setArguments(bundle);
-                    dialogFragment3.show(getFragmentManager(), gameName);
                     break;
                 case SOUND_SENSOR_GAME:
-                    gameName = "SOUND GAME";
-                    bundle.putString("gameName", gameName);
-                    AmplitudeGameFragment fragment4 = new AmplitudeGameFragment();
-                    setFragment(fragment4, "SOUND_SENSOR_GAME");
-//                    fragment4.setText(gameName);
-                    DialogFragment dialogFragment4 = new GameInfoAlertDialogFragment();
-                    dialogFragment4.setArguments(bundle);
-                    dialogFragment4.show(getFragmentManager(), gameName);
+                    amplitudeGameFragment = new AmplitudeGameFragment();
+                    setFragment(amplitudeGameFragment, "SOUND_SENSOR_GAME");
                     break;
             }
         } else {
             nextPlayer();
         }
+    }
+
+    public void setFragment(Fragment fragment, String tag) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, fragment);
+        fragmentTransaction.commit();
     }
 
     /**
@@ -170,20 +154,56 @@ public class GameActivity extends AppCompatActivity {
         new CountDownTimer(10000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                clockTimer.setText("Time left:" + ((millisUntilFinished/1000) + 1));
+                clockTimer.setText("Time left:" + ((millisUntilFinished / 1000) + 1));
             }
 
             public void onFinish() {
                 clockTimer.setText("Game ended!");
+                endGame();
             }
         }.start();
+        startGame();
     }
 
-
-    public void setFragment(Fragment fragment, String tag) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, fragment);
-        fragmentTransaction.commit();
+    /**
+     * Calls the start method in current game fragment
+     */
+    private void startGame() {
+        switch (gameFragmentsList.get(currentGame - 1)) {
+            case ROTATE_GAME:
+                rotateGameFragment.start();
+                break;
+            case WHACK_A_MOLE_GAME:
+                // todo Add call for start game for WHACK A MOLE
+                break;
+            case CONNECTING_DOTS_GAME:
+                // todo Add call for start game for CONNECTING DOTS
+                break;
+            case SOUND_SENSOR_GAME:
+                amplitudeGameFragment.start();
+                break;
+        }
     }
 
+    /**
+     * Calls the end method in current game fragment
+     */
+    private void endGame() {
+        switch (gameFragmentsList.get(currentGame - 1)) {
+            case ROTATE_GAME:
+                rotateGameFragment.stop();
+                rotateGameFragment.getScore();
+                break;
+            case WHACK_A_MOLE_GAME:
+                // todo Add calls for stop game and get score for WHACK A MOLE
+                break;
+            case CONNECTING_DOTS_GAME:
+                // todo Add calls for stop game and get score for CONNECTING DOTS
+                break;
+            case SOUND_SENSOR_GAME:
+                amplitudeGameFragment.stop();
+                amplitudeGameFragment.getScore();
+                break;
+        }
+    }
 }
