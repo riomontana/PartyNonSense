@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.os.Vibrator;
+
 import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
@@ -25,7 +26,7 @@ import java.util.TimerTask;
  *
  * @author Linus Forsberg
  */
-public class AmplitudeGameFragment extends Fragment {
+public class AmplitudeGameFragment extends Fragment implements FragmentTemplate {
 
     private ProgressBar ampProgressBar;
     private ProgressBar countProgressBar;
@@ -41,6 +42,8 @@ public class AmplitudeGameFragment extends Fragment {
     private boolean inInterval = false;
     private int playerScore = 0;
     private TextView tvScore;
+    private GameInfoAlertDialogFragment gameInfoDialog;
+    private static final String gameInfo = "This is the info about the game";
 
     /**
      * Required empty constructor
@@ -48,7 +51,6 @@ public class AmplitudeGameFragment extends Fragment {
     public AmplitudeGameFragment() {
 
     }
-
 
     /**
      * Create necessary GUI components
@@ -67,18 +69,9 @@ public class AmplitudeGameFragment extends Fragment {
         ampProgressBar.setMax(maxAmpValue);
         countProgressBar = view.findViewById(R.id.countProgressBar);
         countProgressBar.setMax(100);
-        return view;
-    }
+        createGameInfoAlertDialog();
 
-    /**
-     * Start recording audio, set game to running and start checking the amplitude
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        startMediaRecorder();
-        gameRunning = true;
-        startAmplitudeCheck();
+        return view;
     }
 
     /**
@@ -89,6 +82,50 @@ public class AmplitudeGameFragment extends Fragment {
         super.onPause();
         gameRunning = false;
         stopMediaRecorder();
+    }
+
+    /**
+     * Create a new alert dialog
+     */
+    public void createGameInfoAlertDialog() {
+        gameInfoDialog = new GameInfoAlertDialogFragment();
+        gameInfoDialog.setTitle("Match the volume");
+        gameInfoDialog.setText(gameInfo);
+        gameInfoDialog.setImageResource(R.drawable.testbild);
+        gameInfoDialog.show(getActivity().getFragmentManager(), "Match the volume");
+    }
+
+    /**
+     * Start game: recording audio, set game to running and start checking the amplitude
+     */
+    @Override
+    public void start() {
+        startMediaRecorder();
+        gameRunning = true;
+        startAmplitudeCheck();
+    }
+
+    /**
+     * Set game to not running which stops the thread from checking amplitude values and stop audio recorder
+     */
+    @Override
+    public void stop() {
+        gameRunning = false;
+        timer.cancel();
+        stopMediaRecorder();
+        countProgressBar.setProgress(0);
+        ampProgressBar.setProgress(0);
+        ampProgressBar.setSecondaryProgress(0);
+    }
+
+    /**
+     * returns the score
+     *
+     * @return player score
+     */
+    @Override
+    public int getScore() {
+        return playerScore;
     }
 
     /**
@@ -136,27 +173,27 @@ public class AmplitudeGameFragment extends Fragment {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void run() {
-                        if (inInterval) {
-                            ampProgressBar.setProgressTintList(
-                                    ColorStateList.valueOf(
-                                            getResources().getColor(R.color.progressBarInterval)));
-                            countProgressBar.setProgress(count);
-                            count++;
-                        } else {
-                            ampProgressBar.setProgressTintList(
-                                    ColorStateList.valueOf(
-                                            getResources().getColor(R.color.progressBarMain)));
+                            if (inInterval) {
+                                ampProgressBar.setProgressTintList(
+                                        ColorStateList.valueOf(
+                                                getResources().getColor(R.color.progressBarInterval)));
+                                countProgressBar.setProgress(count);
+                                count++;
+                            } else {
+                                ampProgressBar.setProgressTintList(
+                                        ColorStateList.valueOf(
+                                                getResources().getColor(R.color.progressBarMain)));
+                            }
+                            if (count == 100) {
+                                vibrator.vibrate(250);
+                                goalValue = random.nextInt(maxAmpValue - 10000) + 5000;
+                                ampProgressBar.setSecondaryProgress(goalValue);
+                                countProgressBar.setProgress(count);
+                                playerScore += 1000;
+                                tvScore.setText("Score: " + playerScore);
+                                count = 0;
+                            }
                         }
-                        if (count == 100) {
-                            vibrator.vibrate(250);
-                            goalValue = random.nextInt(maxAmpValue - 10000) + 5000;
-                            ampProgressBar.setSecondaryProgress(goalValue);
-                            countProgressBar.setProgress(count);
-                            playerScore += 1000;
-                            tvScore.setText("Score: " + playerScore);
-                            count = 0;
-                        }
-                    }
                 });
             }
         }, 1000, 1000);

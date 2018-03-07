@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Linus Forsberg
  */
 
-public class DBHelper extends SQLiteOpenHelper {
+public class HighscoreDatabase extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "HighscoreDatabase";
     private static final String TABLE_HIGHSCORES = "Highscores";
@@ -26,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + PLAYER + " TEXT, " + SCORE + " INTEGER)";
     private static final String RESET_DB = "DROP TABLE " + TABLE_HIGHSCORES;
 
-    public DBHelper(Context context) {
+    public HighscoreDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -134,7 +134,7 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public ArrayList<HighscoreModel> readHighscoreEntries() {
         ArrayList<HighscoreModel> highscoreList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_HIGHSCORES + " ORDER BY SCORE DESC";
+        String selectQuery = "SELECT * FROM " + TABLE_HIGHSCORES + " ORDER BY SCORE DESC LIMIT 10";
         try {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor c = db.rawQuery(selectQuery, null);
