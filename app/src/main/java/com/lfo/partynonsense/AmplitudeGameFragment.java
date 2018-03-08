@@ -40,10 +40,17 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
     private Timer timer = new Timer();
     private int count;
     private boolean inInterval = false;
-    private int playerScore = 0;
+    private int originalScore = 0;
+    private int scorePlusBonus = 0;
+    private int bonus = 1;
     private TextView tvScore;
+    private TextView tvBonus;
     private GameInfoAlertDialogFragment gameInfoDialog;
-    private static final String gameInfo = "This is the info about the game";
+    private static final String gameInfo = "Match the volume on the top bar for as long as possible" +
+            " by inputting sound through the microphone. When the volume is in proper range, " +
+            "the meter turns green and the bar on the bottom fills up with points. " +
+            "When the bar is filled a bonus is rewarded and a new volume is set. " +
+            "Try to fill the bar as many times as possible, Good Luck!";
 
     /**
      * Required empty constructor
@@ -65,6 +72,7 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_amplitude_game, container, false);
         tvScore = view.findViewById(R.id.tvScore);
+        tvBonus = view.findViewById(R.id.tvBonus);
         ampProgressBar = view.findViewById(R.id.ampProgressBar);
         ampProgressBar.setMax(maxAmpValue);
         countProgressBar = view.findViewById(R.id.countProgressBar);
@@ -91,7 +99,7 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
         gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Match the volume");
         gameInfoDialog.setText(gameInfo);
-        gameInfoDialog.setImageResource(R.drawable.testbild);
+        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Match the volume");
     }
 
@@ -113,7 +121,6 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
         gameRunning = false;
         timer.cancel();
         stopMediaRecorder();
-        countProgressBar.setProgress(0);
         ampProgressBar.setProgress(0);
         ampProgressBar.setSecondaryProgress(0);
     }
@@ -125,7 +132,7 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
      */
     @Override
     public int getScore() {
-        return playerScore;
+        return scorePlusBonus;
     }
 
     /**
@@ -179,6 +186,9 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
                                                 getResources().getColor(R.color.progressBarInterval)));
                                 countProgressBar.setProgress(count);
                                 count++;
+                                originalScore += 10;
+                                scorePlusBonus += 10;
+                                tvScore.setText("Score: " + scorePlusBonus);
                             } else {
                                 ampProgressBar.setProgressTintList(
                                         ColorStateList.valueOf(
@@ -186,11 +196,13 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
                             }
                             if (count == 100) {
                                 vibrator.vibrate(250);
+                                bonus++;
+                                scorePlusBonus = originalScore * bonus;
+                                tvScore.setText("Score: " + scorePlusBonus);
+                                tvBonus.setText(bonus + "x BONUS");
                                 goalValue = random.nextInt(maxAmpValue - 10000) + 5000;
                                 ampProgressBar.setSecondaryProgress(goalValue);
                                 countProgressBar.setProgress(count);
-                                playerScore += 1000;
-                                tvScore.setText("Score: " + playerScore);
                                 count = 0;
                             }
                         }

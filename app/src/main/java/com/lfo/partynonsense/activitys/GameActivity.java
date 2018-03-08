@@ -151,7 +151,7 @@ public class GameActivity extends AppCompatActivity {
      * Start count down timer and update user interface
      */
     public void startCountDownTimer() {
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(20000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 clockTimer.setText("Time left:" + ((millisUntilFinished / 1000) + 1));
