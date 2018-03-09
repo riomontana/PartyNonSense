@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,13 @@ import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.lfo.partynonsense.FragmentTemplate;
+import com.lfo.partynonsense.GameInfoAlertDialogFragment;
 import com.lfo.partynonsense.R;
+
 import java.util.Random;
+
 import static android.content.Context.SENSOR_SERVICE;
 
 
@@ -29,17 +34,20 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
 
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
+    private static final int ERRORMARGIN = 10;
+    private static final int POINTS = 1000;
     private View view;
     private SensorManager sensorManager;
     private Sensor proximitySensor, rotationVector;
     private ImageView ivArrow;
-    private TextView tvStart, tvGoal, tvCurrent, tvGuess, tvComand, tvScore;
-    private Button btnReset;
+    private TextView tvCurrent, tvComand, tvScore;
     private Random random = new Random();
-    private int startValue, guessValue, score = 0, goalValue;
+    private int guessValue;
+    private int score = 0;
+    private int goalValue;
     private float mCurrentDegree = 0;
-    //    private float startDegree = 0;
     private int direction;
+    private boolean gameOn = false;
 
     private static final String TAG = "LOG";
 
@@ -54,25 +62,29 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
         view = inflater.inflate(R.layout.fragment_rotate_game, container, false);
         sensorManager = (SensorManager) getActivity().getSystemService
                 (SENSOR_SERVICE);
-        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        if (sensorManager != null) {
+            proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        }
         ivArrow = (ImageView) view.findViewById(R.id.ivArrow);
-        tvStart = (TextView) view.findViewById(R.id.tvStart);
         tvCurrent = (TextView) view.findViewById(R.id.tvEnd);
-        tvGuess = (TextView) view.findViewById(R.id.tvGuess);
-        tvGoal = (TextView) view.findViewById(R.id.tvGoal);
         tvComand = (TextView) view.findViewById(R.id.tvComand);
         tvScore = (TextView) view.findViewById(R.id.tvScore);
         tvScore.setText("Score " + 0);
-        btnReset = (Button) view.findViewById(R.id.btnReset);
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start();
-            }
-        });
-        start();
+        createGameInfoAlertDialog();
         return view;
+    }
+
+    /**
+     * Create a new alert dialog
+     */
+    public void createGameInfoAlertDialog() {
+        Log.d(TAG, "createGameInfoAlertDialog: ");
+        GameInfoAlertDialogFragment gameInfoDialog = new GameInfoAlertDialogFragment();
+        gameInfoDialog.setTitle("Spinner!");
+        gameInfoDialog.setText(getResources().getString(R.string.rotate_game_info));
+        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
+        gameInfoDialog.show(getActivity().getFragmentManager(), "Match the volume");
     }
 
     public void rotateArrow(SensorEvent event) {
@@ -96,30 +108,30 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
 
     private void lockGuess(SensorEvent sensorEvent) {
         if (sensorEvent.sensor == proximitySensor) {
-            guessValue = (int) ((mCurrentDegree + 360));
-            tvGuess.setText("guess " + String.valueOf(guessValue));
-            calculateScore();
-            start();
+            if (sensorEvent.values[0] == 0.0) {
+                guessValue = (int) ((mCurrentDegree + 360));
+                Log.d(TAG, "guessValue: " + guessValue);
+                calculateScore();
+                Log.d(TAG, "---------------------------------------------------------------");
+                start();
+            }
         }
     }
 
     @SuppressLint("SetTextI18n")
     private void calculateScore() {
-        int playerGuess;
         if (direction == RIGHT) {
-            playerGuess = startValue + guessValue;
-            if (playerGuess > 359) playerGuess = playerGuess - 360;
-            if (playerGuess >= (mCurrentDegree - 20) && playerGuess <= (mCurrentDegree + 20)) {
-                score++;
+            if (guessValue >= (goalValue - ERRORMARGIN) && guessValue <= (goalValue + ERRORMARGIN)) {
+                score = score + POINTS;
                 tvScore.setText("Score: " + String.valueOf(score));
+                Log.d(TAG, "Guessed correct");
             }
         }
         if (direction == LEFT) {
-            playerGuess = startValue - guessValue;
-            if (playerGuess < 0) playerGuess = playerGuess + 359;
-            if (playerGuess >= (playerGuess - 20) && playerGuess <= (playerGuess + 20)) {
-                score++;
+            if (guessValue >= (goalValue - ERRORMARGIN) && guessValue <= (goalValue + ERRORMARGIN)) {
+                score = score + POINTS;
                 tvScore.setText("Score: " + String.valueOf(score));
+                Log.d(TAG, "Guessed correct");
             }
         }
     }
@@ -127,13 +139,14 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     @SuppressLint("SetTextI18n")
     @Override
     public void start() {
+        gameOn = true;
         String moveTo;
-//        startDegree = 0;
-        startValue = (int) (((mCurrentDegree) * -1) - 360) * -1;
+        int startValue = (int) (((mCurrentDegree) * -1) - 360) * -1;
+        Log.d(TAG, "start: " + startValue);
         int leftRight = random.nextInt(2);
-//        moveDegrees = random.nextInt(179) + 1;
-        int moveDegrees = 90;
-
+        double randomNumber = random.nextInt(170) + 10;
+        int moveDegrees = (int) Math.round(randomNumber / 10.0) * 10;
+        Log.d(TAG, "move " + moveDegrees + " degrees");
         if (leftRight == RIGHT) {
             moveTo = "Right";
             direction = RIGHT;
@@ -146,12 +159,12 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
             if (goalValue < 0) goalValue = goalValue + 360;
         }
         tvComand.setText("Move " + moveDegrees + " degrees to the " + moveTo);
-        tvStart.setText("Start: " + String.valueOf(startValue));
-        tvGoal.setText("Goal: " + String.valueOf(goalValue));
+        Log.d(TAG, "goalValue: " + goalValue);
     }
 
     @Override
     public void stop() {
+        gameOn = false;
 
     }
 
@@ -163,13 +176,10 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-//        if (startDegree == 0) {
-//            if (sensorEvent.sensor == rotationVector) {
-//                startDegree = ((sensorEvent.values[2] + 1) * 180);
-//            }
-//        }
-        rotateArrow(sensorEvent);
-        lockGuess(sensorEvent);
+        if (gameOn) {
+            rotateArrow(sensorEvent);
+            lockGuess(sensorEvent);
+        }
     }
 
     @Override
