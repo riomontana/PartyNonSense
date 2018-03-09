@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lfo.partynonsense.DummyDBActivity"
+    tools:context="com.lfo.partynonsense.activitys.DummyDataBaseActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <EditText

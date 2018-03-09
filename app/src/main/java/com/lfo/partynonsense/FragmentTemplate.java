@@ -16,8 +16,4 @@ public interface FragmentTemplate {
      */
     public int getScore();
 
-    /*
-     * sets the score to 0
-     */
-    public void reset();
 }

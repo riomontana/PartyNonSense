@@ -16,12 +16,9 @@ import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.lfo.partynonsense.FragmentTemplate;
 import com.lfo.partynonsense.R;
-
 import java.util.Random;
-
 import static android.content.Context.SENSOR_SERVICE;
 
 
@@ -161,11 +158,6 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     @Override
     public int getScore() {
         return score;
-    }
-
-    @Override
-    public void reset() {
-
     }
 
 

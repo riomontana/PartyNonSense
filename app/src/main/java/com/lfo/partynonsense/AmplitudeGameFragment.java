@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.os.Vibrator;
+
 import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
@@ -25,7 +26,7 @@ import java.util.TimerTask;
  *
  * @author Linus Forsberg
  */
-public class AmplitudeGameFragment extends Fragment {
+public class AmplitudeGameFragment extends Fragment implements FragmentTemplate {
 
     private ProgressBar ampProgressBar;
     private ProgressBar countProgressBar;
@@ -39,8 +40,17 @@ public class AmplitudeGameFragment extends Fragment {
     private Timer timer = new Timer();
     private int count;
     private boolean inInterval = false;
-    private int playerScore = 0;
+    private int originalScore = 0;
+    private int scorePlusBonus = 0;
+    private int bonus = 1;
     private TextView tvScore;
+    private TextView tvBonus;
+    private GameInfoAlertDialogFragment gameInfoDialog;
+    private static final String gameInfo = "Match the volume on the top bar for as long as possible" +
+            " by inputting sound through the microphone. When the volume is in proper range, " +
+            "the meter turns green and the bar on the bottom fills up with points. " +
+            "When the bar is filled a bonus is rewarded and a new volume is set. " +
+            "Try to fill the bar as many times as possible, Good Luck!";
 
     /**
      * Required empty constructor
@@ -48,7 +58,6 @@ public class AmplitudeGameFragment extends Fragment {
     public AmplitudeGameFragment() {
 
     }
-
 
     /**
      * Create necessary GUI components
@@ -63,22 +72,14 @@ public class AmplitudeGameFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_amplitude_game, container, false);
         tvScore = view.findViewById(R.id.tvScore);
+        tvBonus = view.findViewById(R.id.tvBonus);
         ampProgressBar = view.findViewById(R.id.ampProgressBar);
         ampProgressBar.setMax(maxAmpValue);
         countProgressBar = view.findViewById(R.id.countProgressBar);
         countProgressBar.setMax(100);
-        return view;
-    }
+        createGameInfoAlertDialog();
 
-    /**
-     * Start recording audio, set game to running and start checking the amplitude
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        startMediaRecorder();
-        gameRunning = true;
-        startAmplitudeCheck();
+        return view;
     }
 
     /**
@@ -89,6 +90,49 @@ public class AmplitudeGameFragment extends Fragment {
         super.onPause();
         gameRunning = false;
         stopMediaRecorder();
+    }
+
+    /**
+     * Create a new alert dialog
+     */
+    public void createGameInfoAlertDialog() {
+        gameInfoDialog = new GameInfoAlertDialogFragment();
+        gameInfoDialog.setTitle("Match the volume");
+        gameInfoDialog.setText(gameInfo);
+        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
+        gameInfoDialog.show(getActivity().getFragmentManager(), "Match the volume");
+    }
+
+    /**
+     * Start game: recording audio, set game to running and start checking the amplitude
+     */
+    @Override
+    public void start() {
+        startMediaRecorder();
+        gameRunning = true;
+        startAmplitudeCheck();
+    }
+
+    /**
+     * Set game to not running which stops the thread from checking amplitude values and stop audio recorder
+     */
+    @Override
+    public void stop() {
+        gameRunning = false;
+        timer.cancel();
+        stopMediaRecorder();
+        ampProgressBar.setProgress(0);
+        ampProgressBar.setSecondaryProgress(0);
+    }
+
+    /**
+     * returns the score
+     *
+     * @return player score
+     */
+    @Override
+    public int getScore() {
+        return scorePlusBonus;
     }
 
     /**
@@ -136,27 +180,32 @@ public class AmplitudeGameFragment extends Fragment {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void run() {
-                        if (inInterval) {
-                            ampProgressBar.setProgressTintList(
-                                    ColorStateList.valueOf(
-                                            getResources().getColor(R.color.progressBarInterval)));
-                            countProgressBar.setProgress(count);
-                            count++;
-                        } else {
-                            ampProgressBar.setProgressTintList(
-                                    ColorStateList.valueOf(
-                                            getResources().getColor(R.color.progressBarMain)));
+                            if (inInterval) {
+                                ampProgressBar.setProgressTintList(
+                                        ColorStateList.valueOf(
+                                                getResources().getColor(R.color.progressBarInterval)));
+                                countProgressBar.setProgress(count);
+                                count++;
+                                originalScore += 10;
+                                scorePlusBonus += 10;
+                                tvScore.setText("Score: " + scorePlusBonus);
+                            } else {
+                                ampProgressBar.setProgressTintList(
+                                        ColorStateList.valueOf(
+                                                getResources().getColor(R.color.progressBarMain)));
+                            }
+                            if (count == 100) {
+                                vibrator.vibrate(250);
+                                bonus++;
+                                scorePlusBonus = originalScore * bonus;
+                                tvScore.setText("Score: " + scorePlusBonus);
+                                tvBonus.setText(bonus + "x BONUS");
+                                goalValue = random.nextInt(maxAmpValue - 10000) + 5000;
+                                ampProgressBar.setSecondaryProgress(goalValue);
+                                countProgressBar.setProgress(count);
+                                count = 0;
+                            }
                         }
-                        if (count == 100) {
-                            vibrator.vibrate(250);
-                            goalValue = random.nextInt(maxAmpValue - 10000) + 5000;
-                            ampProgressBar.setSecondaryProgress(goalValue);
-                            countProgressBar.setProgress(count);
-                            playerScore += 1000;
-                            tvScore.setText("Score: " + playerScore);
-                            count = 0;
-                        }
-                    }
                 });
             }
         }, 1000, 1000);
