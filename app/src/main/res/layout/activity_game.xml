@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.lfo.partynonsense.activitys.GameActivity">
 
     <LinearLayout
@@ -24,7 +25,8 @@
             android:layout_weight="1"
             android:text="Player"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="280dp"
             tools:layout_editor_absoluteY="258dp" />
@@ -38,7 +40,7 @@
             android:layout_weight="1"
             android:text="Get ready!"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/holo_red_dark"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="38dp"
             tools:layout_editor_absoluteY="207dp" />
@@ -50,7 +52,7 @@
             android:layout_weight="1"
             android:text="1000 p"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="280dp"
             tools:layout_editor_absoluteY="258dp" />

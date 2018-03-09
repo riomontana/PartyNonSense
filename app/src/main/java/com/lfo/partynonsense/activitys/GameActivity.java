@@ -1,6 +1,5 @@
 package com.lfo.partynonsense.activitys;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.lfo.partynonsense.AmplitudeGameFragment;
-import com.lfo.partynonsense.GameInfoAlertDialogFragment;
+import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
 import com.lfo.partynonsense.R;
 import com.lfo.partynonsense.fragments.RotateGameFragment;
 import com.lfo.partynonsense.fragments.TestFragment;
