@@ -14,16 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.lfo.partynonsense.FragmentTemplate;
-import com.lfo.partynonsense.GameInfoAlertDialogFragment;
 import com.lfo.partynonsense.R;
-
 import java.util.Random;
-
 import static android.content.Context.SENSOR_SERVICE;
 
 
@@ -84,7 +79,17 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
         gameInfoDialog.setTitle("Spinner!");
         gameInfoDialog.setText(getResources().getString(R.string.rotate_game_info));
         gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
-        gameInfoDialog.show(getActivity().getFragmentManager(), "Match the volume");
+        gameInfoDialog.show(getActivity().getFragmentManager(), "Spinner");
+    }
+
+    /**
+     * Create a new alert dialog when the game stops
+     */
+    public void createGameStopAlertDialog() {
+        GameStopAlertDialog gameStopAlertDialog = new GameStopAlertDialog();
+        gameStopAlertDialog.setTitle("Spinner!");
+        gameStopAlertDialog.setScore(score);
+        gameStopAlertDialog.show(getActivity().getFragmentManager(), "Spinner");
     }
 
     public void rotateArrow(SensorEvent event) {
@@ -165,7 +170,7 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     @Override
     public void stop() {
         gameOn = false;
-
+        createGameStopAlertDialog();
     }
 
     @Override
@@ -183,9 +188,7 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int i) {    }
 
     @Override
     public void onResume() {
@@ -200,5 +203,4 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
         sensorManager.unregisterListener(this, proximitySensor);
         sensorManager.unregisterListener(this, rotationVector);
     }
-
 }
