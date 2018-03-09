@@ -1,13 +1,13 @@
 package com.lfo.partynonsense.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,23 +30,19 @@ import static android.content.Context.SENSOR_SERVICE;
  */
 public class RotateGameFragment extends Fragment implements FragmentTemplate, SensorEventListener {
 
+    private static final int RIGHT = 0;
+    private static final int LEFT = 1;
     private View view;
     private SensorManager sensorManager;
-    private Sensor accelerometerSensor, magnetometerSensor, proximitySensor;
-    private ImageView ivArrow, ivCircle;
+    private Sensor proximitySensor, rotationVector;
+    private ImageView ivArrow;
     private TextView tvStart, tvGoal, tvCurrent, tvGuess, tvComand, tvScore;
     private Button btnReset;
     private Random random = new Random();
-    private int startValue, guessValue, score = -1, goalValue;
+    private int startValue, guessValue, score = 0, goalValue;
     private float mCurrentDegree = 0;
-    private long lastUpdateTime = System.currentTimeMillis();
-    private float[] mLastAccelerometer = new float[3];
-    private float[] mLastMagnetometer = new float[3];
-    private boolean mLastAccelerometerSet = false;
-    private boolean mLastMagnetometerSet = false;
-    private float[] mRotationMatrix = new float[9];
-    private float[] mOrientation = new float[3];
-
+    //    private float startDegree = 0;
+    private int direction;
 
     private static final String TAG = "LOG";
 
@@ -61,17 +57,16 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
         view = inflater.inflate(R.layout.fragment_rotate_game, container, false);
         sensorManager = (SensorManager) getActivity().getSystemService
                 (SENSOR_SERVICE);
-        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
         ivArrow = (ImageView) view.findViewById(R.id.ivArrow);
-        ivCircle = (ImageView) view.findViewById(R.id.ivCircle);
         tvStart = (TextView) view.findViewById(R.id.tvStart);
         tvCurrent = (TextView) view.findViewById(R.id.tvEnd);
         tvGuess = (TextView) view.findViewById(R.id.tvGuess);
         tvGoal = (TextView) view.findViewById(R.id.tvGoal);
         tvComand = (TextView) view.findViewById(R.id.tvComand);
         tvScore = (TextView) view.findViewById(R.id.tvScore);
+        tvScore.setText("Score " + 0);
         btnReset = (Button) view.findViewById(R.id.btnReset);
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,87 +74,83 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
                 start();
             }
         });
+        start();
         return view;
     }
 
-    public void rotateUsingOrientationAPI(SensorEvent event) {
-        if (event.sensor == accelerometerSensor) {
-            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
-            mLastAccelerometerSet = true;
-        } else if (event.sensor == magnetometerSensor) {
-            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
-            mLastMagnetometerSet = true;
-        }
-        //only 4 times in 1 second
-        if (mLastAccelerometerSet && mLastMagnetometerSet && System.currentTimeMillis() - lastUpdateTime > 250) {
-            SensorManager.getRotationMatrix(mRotationMatrix, null, mLastAccelerometer, mLastMagnetometer);
-            SensorManager.getOrientation(mRotationMatrix, mOrientation);
-            float azimuthInRadians = mOrientation[0];
-            float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
-//            tvStart.setText(String.valueOf((int) mCurrentDegree)); //TODO Remove
-            tvCurrent.setText("current " + String.valueOf((int) azimuthInDegress));
+    public void rotateArrow(SensorEvent event) {
+        //Game Rotation Sensor
+        if (event.sensor == rotationVector) {
+            float eventValue = event.values[2];
+            float angleInDegress = (((eventValue + 1) * 180));
+            tvCurrent.setText(String.valueOf((int) (angleInDegress - 360) * -1));
             RotateAnimation mRotateAnimation = new RotateAnimation(
-                    mCurrentDegree, azimuthInDegress,
+                    mCurrentDegree, -angleInDegress,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
-
-//            if (((mCurrentDegree > 270 && mCurrentDegree < 360) && (azimuthInDegress >= 0 && azimuthInDegress < 90) ||
-//                    ((mCurrentDegree < 90 && mCurrentDegree >= 0)) && (azimuthInDegress > 270 && azimuthInDegress < 360))) {
-//                mRotateAnimation.setDuration(0);
-//            } else {
+            //250 milliseconds
             mRotateAnimation.setDuration(250);
-//            }
-
             mRotateAnimation.setFillAfter(true);
             ivArrow.startAnimation(mRotateAnimation);
-            mCurrentDegree = azimuthInDegress;
-            lastUpdateTime = System.currentTimeMillis();
+            mCurrentDegree = -angleInDegress;
+
         }
     }
 
     private void lockGuess(SensorEvent sensorEvent) {
         if (sensorEvent.sensor == proximitySensor) {
-            guessValue = (int) mCurrentDegree;
+            guessValue = (int) ((mCurrentDegree + 360));
             tvGuess.setText("guess " + String.valueOf(guessValue));
             calculateScore();
+            start();
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void calculateScore() {
-        Log.d(TAG, "startValue: " + startValue);
-        Log.d(TAG, "guessValue: " + guessValue);
-        Log.d(TAG, "goalValue " + goalValue);
-        if (startValue + guessValue > 360) {
-            guessValue = guessValue - 360;
-            Log.d(TAG, "if( > 360 ) guessValue changed to " + guessValue);
+        int playerGuess;
+        if (direction == RIGHT) {
+            playerGuess = startValue + guessValue;
+            if (playerGuess > 359) playerGuess = playerGuess - 360;
+            if (playerGuess >= (mCurrentDegree - 20) && playerGuess <= (mCurrentDegree + 20)) {
+                score++;
+                tvScore.setText("Score: " + String.valueOf(score));
+            }
         }
-        Log.d(TAG, "calculateScore: start+guess=" + (startValue + guessValue) + " >= goalvalue=" + goalValue);
-        if ((startValue + guessValue >= (startValue + goalValue) - 20) && (startValue + guessValue <= (startValue + goalValue) + 20)) {
-            score++;
-            tvScore.setText("Score: " + String.valueOf(score));
+        if (direction == LEFT) {
+            playerGuess = startValue - guessValue;
+            if (playerGuess < 0) playerGuess = playerGuess + 359;
+            if (playerGuess >= (playerGuess - 20) && playerGuess <= (playerGuess + 20)) {
+                score++;
+                tvScore.setText("Score: " + String.valueOf(score));
+            }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void start() {
+        String moveTo;
+//        startDegree = 0;
+        startValue = (int) (((mCurrentDegree) * -1) - 360) * -1;
         int leftRight = random.nextInt(2);
-//        goalValue = random.nextInt(359) + 1;
-        goalValue = 90;
-        String direction = "";
-        if (leftRight == 0) {
-            direction = "Right";
-        } else {
-            direction = "Left";
-        }
-        tvComand.setText("Move " + goalValue + " degrees to the " + direction);
-        startValue = (int) mCurrentDegree;
+//        moveDegrees = random.nextInt(179) + 1;
+        int moveDegrees = 90;
 
-        tvStart.setText("Start " + String.valueOf((int) mCurrentDegree));
-        if ((startValue + goalValue) > 360) {
-            tvGoal.setText("Goal " + String.valueOf((goalValue + startValue - 360)));
+        if (leftRight == RIGHT) {
+            moveTo = "Right";
+            direction = RIGHT;
+            goalValue = startValue + moveDegrees;
+            if (goalValue > 359) goalValue = goalValue - 360;
         } else {
-            tvGoal.setText("Goal " + String.valueOf((goalValue + startValue)));
+            moveTo = "Left";
+            direction = LEFT;
+            goalValue = startValue - moveDegrees;
+            if (goalValue < 0) goalValue = goalValue + 360;
         }
+        tvComand.setText("Move " + moveDegrees + " degrees to the " + moveTo);
+        tvStart.setText("Start: " + String.valueOf(startValue));
+        tvGoal.setText("Goal: " + String.valueOf(goalValue));
     }
 
     @Override
@@ -180,7 +171,12 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        rotateUsingOrientationAPI(sensorEvent);
+//        if (startDegree == 0) {
+//            if (sensorEvent.sensor == rotationVector) {
+//                startDegree = ((sensorEvent.values[2] + 1) * 180);
+//            }
+//        }
+        rotateArrow(sensorEvent);
         lockGuess(sensorEvent);
     }
 
@@ -192,17 +188,15 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, rotationVector, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this, accelerometerSensor);
-        sensorManager.unregisterListener(this, magnetometerSensor);
         sensorManager.unregisterListener(this, proximitySensor);
+        sensorManager.unregisterListener(this, rotationVector);
     }
 
 }
