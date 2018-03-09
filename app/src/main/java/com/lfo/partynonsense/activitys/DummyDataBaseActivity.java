@@ -1,11 +1,14 @@
-package com.lfo.partynonsense;
+package com.lfo.partynonsense.activitys;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import com.lfo.partynonsense.HighscoreDatabase;
+import com.lfo.partynonsense.HighscoreModel;
+import com.lfo.partynonsense.R;
 
 import java.util.ArrayList;
 
@@ -14,17 +17,17 @@ import java.util.ArrayList;
  * Implemented methods can be used later
  * @author Linus Forsberg
  */
-public class DummyDBActivity extends AppCompatActivity {
+public class DummyDataBaseActivity extends AppCompatActivity {
 
     private EditText inputPlayer;
-    private DBHelper dbHelper;
+    private HighscoreDatabase highscoreDatabase;
     private int playerID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy_db);
-        dbHelper = new DBHelper(this);
+        highscoreDatabase = new HighscoreDatabase(this);
         inputPlayer = findViewById(R.id.inputPlayer);
     }
 
@@ -35,8 +38,8 @@ public class DummyDBActivity extends AppCompatActivity {
      */
     public void addPlayerToDB(View view) {
         String playerName = inputPlayer.getText().toString();
-        dbHelper.addPlayer(playerName);
-        playerID = dbHelper.getPlayerID(playerName);
+        highscoreDatabase.addPlayer(playerName);
+        playerID = highscoreDatabase.getPlayerID(playerName);
         Log.d("playerid", String.valueOf(playerID));
     }
 
@@ -47,7 +50,7 @@ public class DummyDBActivity extends AppCompatActivity {
      */
     public void addScoreToDB(View view) {
         int score = 1000;
-        dbHelper.addScore(playerID, score);
+        highscoreDatabase.addScore(playerID, score);
     }
 
     /**
@@ -56,7 +59,7 @@ public class DummyDBActivity extends AppCompatActivity {
      * @param view
      */
     public void resetDB(View view) {
-        dbHelper.resetDataBase();
+        highscoreDatabase.resetDataBase();
     }
 
     /**
@@ -64,7 +67,7 @@ public class DummyDBActivity extends AppCompatActivity {
      * @param view
      */
     public void getHighscoreListFromDB(View view) {
-        ArrayList<HighscoreModel> highscoreList = dbHelper.readHighscoreEntries();
+        ArrayList<HighscoreModel> highscoreList = highscoreDatabase.readHighscoreEntries();
         for(HighscoreModel entries : highscoreList)
             Log.d(entries.player, String.valueOf(entries.score));
     }
