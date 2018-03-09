@@ -1,4 +1,4 @@
-package com.lfo.partynonsense;
+package com.lfo.partynonsense.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
