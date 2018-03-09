@@ -171,7 +171,6 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     public void stop() {
         gameOn = false;
         createGameStopAlertDialog();
-
     }
 
     @Override
@@ -189,9 +188,7 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int i) {    }
 
     @Override
     public void onResume() {
@@ -206,5 +203,4 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
         sensorManager.unregisterListener(this, proximitySensor);
         sensorManager.unregisterListener(this, rotationVector);
     }
-
 }
