@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
@@ -54,6 +55,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //TODO Testvalues REMOVE
         playerScore.put("Player 1", 10);
@@ -149,7 +151,7 @@ public class GameActivity extends AppCompatActivity {
      * Start count down timer and update user interface
      */
     public void startCountDownTimer() {
-        new CountDownTimer(20000, 1000) {
+        new CountDownTimer(50000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 clockTimer.setText("Time left:" + ((millisUntilFinished / 1000) + 1));
