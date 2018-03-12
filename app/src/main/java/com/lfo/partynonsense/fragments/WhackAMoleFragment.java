@@ -101,7 +101,7 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         if (mProximitySensor != null) {
             mSensorManager.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-            Toast.makeText(getActivity(), "Proximity sensor ready!", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "Proximity sensor ready!", Toast.LENGTH_LONG).show();
 
         } else {
             Toast.makeText(getActivity(), "Proximitysensor not avaiable", Toast.LENGTH_LONG).show();
@@ -119,7 +119,7 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
     public void createGameInfoAlertDialog() {
         GameInfoAlertDialogFragment gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Whack A Mole");
-        gameInfoDialog.setText(getResources().getString(R.string.rotate_game_info));
+        gameInfoDialog.setText(getResources().getString(R.string.whack_a_mole));
         gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Whack A Mole");
     }
