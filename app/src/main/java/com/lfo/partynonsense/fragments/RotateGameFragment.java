@@ -29,7 +29,7 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
 
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
-    private static final int ERRORMARGIN = 10;
+    private static final int ERRORMARGIN = 30;
     private static final int POINTS = 1000;
     private View view;
     private SensorManager sensorManager;
@@ -170,7 +170,10 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
     @Override
     public void stop() {
         gameOn = false;
+        sensorManager.unregisterListener(this, proximitySensor);
+        sensorManager.unregisterListener(this, rotationVector);
         createGameStopAlertDialog();
+
     }
 
     @Override

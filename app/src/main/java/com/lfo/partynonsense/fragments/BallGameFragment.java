@@ -96,9 +96,9 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         super.onResume();
     }
     @Override
+
     public void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(sensorListener);
     }
 
     public void onDestroy() {
