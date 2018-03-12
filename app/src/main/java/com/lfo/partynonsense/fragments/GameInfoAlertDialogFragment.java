@@ -48,7 +48,7 @@ public class GameInfoAlertDialogFragment extends DialogFragment {
         layout.addView(imageView);
         builder.setView(layout);
         AlertDialog alertDialog = builder.create();
-
+        setCancelable(false);
         return alertDialog;
     }
 
@@ -76,4 +76,5 @@ public class GameInfoAlertDialogFragment extends DialogFragment {
         this.resourceId = resourceId;
 
     }
+
 }

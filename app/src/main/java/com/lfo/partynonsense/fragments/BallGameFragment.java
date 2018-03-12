@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lfo.partynonsense.BallGameSensorListener;
 import com.lfo.partynonsense.FragmentTemplate;
@@ -32,7 +33,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     private Integer score;
     private GameInfoAlertDialogFragment gameInfoDialog;
     private GameStopAlertDialog gameStopAlertDialog;
-    private static final String gameInfo = "Hold your phone verticaly and use it as a balancing board. The ball rolls in the directions you're tilting the phone use this to catch as many stars you can before the times up. Touching the edges makes you lose points";
+    private static final String gameInfo = "Hold your phone verticaly and use it as a balancing board. The ball rolls in the directions you're tilting the phone use this to catch as many stars you can before the times up. Catching several stars in a row gives you a pointsmultiplier. Touching the edges makes you lose your pointsmultiplier";
     public BallGameFragment() {
         // Required empty public constructor
     }
@@ -61,7 +62,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
 
-        sensorListener = new BallGameSensorListener(playerIv, goalIv, ballLayout);
+        sensorListener = new BallGameSensorListener(playerIv, goalIv, ballLayout, (TextView) v.findViewById(R.id.score), (TextView)v.findViewById(R.id.multi));
         score = 0;
         createGameInfoAlertDialog();
         return v;
@@ -121,6 +122,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     public int getScore() {
         return score;
     }
+
     public void reset() {
 
     }
