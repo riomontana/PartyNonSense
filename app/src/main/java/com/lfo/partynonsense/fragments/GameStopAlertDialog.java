@@ -36,6 +36,7 @@ public class GameStopAlertDialog extends DialogFragment {
                     }
                 });
         AlertDialog alertDialog = builder.create();
+        setCancelable(false);
         return alertDialog;
     }
 
@@ -53,4 +54,8 @@ public class GameStopAlertDialog extends DialogFragment {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public void onBackPressed() {
+    }
 }
+
