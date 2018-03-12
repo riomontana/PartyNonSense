@@ -95,9 +95,9 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         super.onResume();
     }
     @Override
+
     public void onPause() {
         super.onPause();
-        stop();
     }
 
     public void onDestroy() {

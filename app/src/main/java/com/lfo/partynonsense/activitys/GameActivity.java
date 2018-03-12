@@ -15,7 +15,7 @@ import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
 import com.lfo.partynonsense.R;
 import com.lfo.partynonsense.fragments.BallGameFragment;
 import com.lfo.partynonsense.fragments.RotateGameFragment;
-import com.lfo.partynonsense.fragments.TestFragment;
+import com.lfo.partynonsense.fragments.WhackAMoleFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,15 +43,17 @@ public class GameActivity extends AppCompatActivity {
     private TextView tvPlayer, clockTimer, tvScore;
     private HashMap playerScore = new LinkedHashMap<String, Integer>();
     private int nbrOfPlayers;
+    private int time;
+    private String[] playerNames;
     private int currentPlayer = 0;
     private int currentGame = 0;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private FragmentManager fragmentManager;
     private ArrayList<Integer> gameFragmentsList = new ArrayList<>();
 
     private RotateGameFragment rotateGameFragment;
     private AmplitudeGameFragment amplitudeGameFragment;
     private BallGameFragment ballGameFragment;
-    // todo lägg till WHACK A MOLE och CONNECTING DOTS som instansvariabler
+    private WhackAMoleFragment whackAMoleFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +61,15 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //TODO Testvalues REMOVE
-        playerScore.put("Player 1", 10);
-        playerScore.put("Player 2", 20);
-        playerScore.put("Player 3", 15);
-        //TODO Testvalues REMOVE
-
         Intent intent = getIntent();
         nbrOfPlayers = (Integer) intent.getIntExtra("nbrOfPlayers", -1);
-
+        time = (Integer) intent.getIntExtra("time", -1);
+        playerNames = new String[nbrOfPlayers];
+        playerNames = intent.getStringArrayExtra("playerNames");
+        for (String player : playerNames) {
+            playerScore.put(player, 0);
+        }
+    fragmentManager= getSupportFragmentManager();
         initTopbar();
         randomGames();
 
@@ -84,7 +86,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void setTopbarValues(int player) {
         tvPlayer.setText(playerScore.keySet().toArray()[player - 1].toString());
-        tvScore.setText("Score: " + playerScore.get(playerScore.keySet().toArray()[player - 1].toString()).toString());
+        tvScore.setText("Score: " + playerScore.get(playerScore.keySet().toArray()[player - 1].toString()));
     }
 
     private void randomGames() {
@@ -126,8 +128,8 @@ public class GameActivity extends AppCompatActivity {
                     setFragment(rotateGameFragment, "ROTATE_GAME");
                     break;
                 case WHACK_A_MOLE_GAME:
-                    TestFragment fragment2 = new TestFragment();
-                    setFragment(fragment2, "WHACK_A_MOLE_GAME");
+                    whackAMoleFragment = new WhackAMoleFragment();
+                    setFragment(whackAMoleFragment, "WHACK_A_MOLE_GAME");
                     break;
                 case CONNECTING_DOTS_GAME:
                     ballGameFragment = new BallGameFragment();
@@ -153,7 +155,7 @@ public class GameActivity extends AppCompatActivity {
      * Start count down timer and update user interface
      */
     public void startCountDownTimer() {
-        new CountDownTimer(50000, 1000) {
+        new CountDownTimer(time * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 clockTimer.setText("Time left:" + ((millisUntilFinished / 1000) + 1));
@@ -176,7 +178,7 @@ public class GameActivity extends AppCompatActivity {
                 rotateGameFragment.start();
                 break;
             case WHACK_A_MOLE_GAME:
-                // todo Add call for start game for WHACK A MOLE
+                whackAMoleFragment.start();
                 break;
             case CONNECTING_DOTS_GAME:
                 ballGameFragment.start();
@@ -191,21 +193,44 @@ public class GameActivity extends AppCompatActivity {
      * Calls the end method in current game fragment
      */
     private void endGame() {
+        int score;
+        int newScore;
         switch (gameFragmentsList.get(currentGame - 1)) {
             case ROTATE_GAME:
                 rotateGameFragment.stop();
-                rotateGameFragment.getScore();
+                score = (Integer) playerScore.get(playerScore.keySet().toArray()[currentPlayer - 1].toString());
+                newScore = rotateGameFragment.getScore();
+                if (newScore < 0) newScore = 0;
+                score = score + newScore;
+                playerScore.put(playerScore.keySet().toArray()[currentPlayer - 1].toString(), score);
+                setTopbarValues(currentPlayer);
                 break;
             case WHACK_A_MOLE_GAME:
-                // todo Add calls for stop game and get score for WHACK A MOLE
+                whackAMoleFragment.stop();
+                score = (Integer) playerScore.get(playerScore.keySet().toArray()[currentPlayer - 1].toString());
+                newScore = whackAMoleFragment.getScore();
+                if (newScore < 0) newScore = 0;
+                score = score + newScore;
+                playerScore.put(playerScore.keySet().toArray()[currentPlayer - 1].toString(), score);
+                setTopbarValues(currentPlayer);
                 break;
             case CONNECTING_DOTS_GAME:
                 ballGameFragment.stop();
-                ballGameFragment.getScore();
+                score = (Integer) playerScore.get(playerScore.keySet().toArray()[currentPlayer - 1].toString());
+                newScore = ballGameFragment.getScore();
+                if (newScore < 0) newScore = 0;
+                score = score + newScore;
+                playerScore.put(playerScore.keySet().toArray()[currentPlayer - 1].toString(), score);
+                setTopbarValues(currentPlayer);
                 break;
             case SOUND_SENSOR_GAME:
                 amplitudeGameFragment.stop();
-                amplitudeGameFragment.getScore();
+                score = (Integer) playerScore.get(playerScore.keySet().toArray()[currentPlayer - 1].toString());
+                newScore = amplitudeGameFragment.getScore();
+                if (newScore < 0) newScore = 0;
+                score = score + newScore;
+                playerScore.put(playerScore.keySet().toArray()[currentPlayer - 1].toString(), score);
+                setTopbarValues(currentPlayer);
                 break;
         }
     }

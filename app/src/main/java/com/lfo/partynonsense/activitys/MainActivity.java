@@ -214,4 +214,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }
