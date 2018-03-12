@@ -5,10 +5,13 @@ import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
@@ -112,7 +115,8 @@ public class GameActivity extends AppCompatActivity {
             currentGame = 0;
             changeGame();
         } else {
-            this.finish();
+            showScores();
+//            this.finish();
             //TODO GAME OVER
         }
     }
@@ -233,5 +237,51 @@ public class GameActivity extends AppCompatActivity {
                 setTopbarValues(currentPlayer);
                 break;
         }
+    }
+
+    private void showScores(){
+        final AlertDialog.Builder playerBuilder = new AlertDialog.Builder(GameActivity.this);
+        final View playerView = getLayoutInflater().inflate(R.layout.score_layout, null);
+        playerBuilder.setTitle("Score");
+        playerBuilder.setView(playerView);
+        TextView[] playerTvs = new TextView[4];
+        playerTvs[0] = playerView.findViewById(R.id.player1);
+        playerTvs[1] = playerView.findViewById(R.id.player2);
+        playerTvs[2] = playerView.findViewById(R.id.player3);
+        playerTvs[3] = playerView.findViewById(R.id.player4);
+        if(nbrOfPlayers == 1){
+            playerTvs[1].setVisibility(View.GONE);
+            playerTvs[2].setVisibility(View.GONE);
+            playerTvs[3].setVisibility(View.GONE);
+        }else if(nbrOfPlayers == 2){
+            playerTvs[2].setVisibility(View.GONE);
+            playerTvs[3].setVisibility(View.GONE);
+        }else if(nbrOfPlayers == 3){
+            playerTvs[3].setVisibility(View.GONE);
+        }else{
+        }
+        final AlertDialog dialog = playerBuilder.create();
+        dialog.show();
+        for(int i = 0; i < nbrOfPlayers; i++){
+            playerTvs[i].setText("Player "+ (i+1) + ": " + playerScore.keySet().toArray()[i].toString() + ", "+playerScore.get(playerScore.keySet().toArray()[i].toString()) + "p");
+        }
+        Button closeBtn = playerView.findViewById(R.id.close);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                closeActivity();
+
+            }
+        });
+    }
+
+    private void closeActivity(){
+        this.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
