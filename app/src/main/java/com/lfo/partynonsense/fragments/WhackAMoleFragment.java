@@ -271,6 +271,7 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
         running = false;
         animation.interrupt();
         createGameStopAlertDialog();
+        mSensorManager.unregisterListener(this);
 
     }
 

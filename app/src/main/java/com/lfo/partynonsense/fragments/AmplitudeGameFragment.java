@@ -140,6 +140,7 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
         ampProgressBar.setProgress(0);
         ampProgressBar.setSecondaryProgress(0);
         createGameStopAlertDialog();
+
     }
 
     /**
