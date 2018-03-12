@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
 import com.lfo.partynonsense.R;
+import com.lfo.partynonsense.fragments.BallGameFragment;
 import com.lfo.partynonsense.fragments.RotateGameFragment;
 import com.lfo.partynonsense.fragments.TestFragment;
 
@@ -49,6 +50,7 @@ public class GameActivity extends AppCompatActivity {
 
     private RotateGameFragment rotateGameFragment;
     private AmplitudeGameFragment amplitudeGameFragment;
+    private BallGameFragment ballGameFragment;
     // todo lägg till WHACK A MOLE och CONNECTING DOTS som instansvariabler
 
     @Override
@@ -128,8 +130,8 @@ public class GameActivity extends AppCompatActivity {
                     setFragment(fragment2, "WHACK_A_MOLE_GAME");
                     break;
                 case CONNECTING_DOTS_GAME:
-                    TestFragment fragment3 = new TestFragment();
-                    setFragment(fragment3, "CONNECTING_DOTS_GAME");
+                    ballGameFragment = new BallGameFragment();
+                    setFragment(ballGameFragment, "CONNECTING_DOTS_GAME");
                     break;
                 case SOUND_SENSOR_GAME:
                     amplitudeGameFragment = new AmplitudeGameFragment();
@@ -177,7 +179,7 @@ public class GameActivity extends AppCompatActivity {
                 // todo Add call for start game for WHACK A MOLE
                 break;
             case CONNECTING_DOTS_GAME:
-                // todo Add call for start game for CONNECTING DOTS
+                ballGameFragment.start();
                 break;
             case SOUND_SENSOR_GAME:
                 amplitudeGameFragment.start();
@@ -198,7 +200,8 @@ public class GameActivity extends AppCompatActivity {
                 // todo Add calls for stop game and get score for WHACK A MOLE
                 break;
             case CONNECTING_DOTS_GAME:
-                // todo Add calls for stop game and get score for CONNECTING DOTS
+                ballGameFragment.stop();
+                ballGameFragment.getScore();
                 break;
             case SOUND_SENSOR_GAME:
                 amplitudeGameFragment.stop();
