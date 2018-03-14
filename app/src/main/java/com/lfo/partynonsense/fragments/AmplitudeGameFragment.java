@@ -50,11 +50,6 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
     private TextView tvBonus;
     private GameInfoAlertDialogFragment gameInfoDialog;
     private GameStopAlertDialog gameStopAlertDialog;
-    private static final String gameInfo = "Match the volume on the top bar for as long as possible" +
-            " by inputting sound through the microphone. When the volume is in proper range, " +
-            "the meter turns green and the bar on the bottom fills up with points. " +
-            "When the bar is filled a bonus is rewarded and a new volume is set. " +
-            "Try to fill the bar as many times as possible, Good Luck!";
 
     /**
      * Required empty constructor
@@ -102,7 +97,7 @@ public class AmplitudeGameFragment extends Fragment implements FragmentTemplate 
     public void createGameInfoAlertDialog() {
         gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Match the volume");
-        gameInfoDialog.setText(gameInfo);
+        gameInfoDialog.setText(getResources().getString(R.string.amplitude_game));
         gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Match the volume");
     }

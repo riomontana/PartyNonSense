@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class WhackAMoleFragment extends Fragment implements SensorEventListener {
 
     private static final int POINTS = 100;
+    private static final int MINUS_POINT = 50;
 
     private SensorManager mSensorManager;
     private Animation mFallInAnim, mFallUpAnim, mFallOutDownAnim;
@@ -89,25 +90,16 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
         ivFinalScore.setVisibility(View.INVISIBLE);
         btnStart = (Button) view.findViewById(R.id.btnStart);
 
-        //Sets the animations for the imageView and custom button.
-
-//        mFallInAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.falldown);
-//        mFallUpAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.fallup);
-//        mFallOutDownAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.falloutdown);
-
         //Registers sensorListener for the proximity sensor.
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         if (mProximitySensor != null) {
             mSensorManager.registerListener(this, mProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-//            Toast.makeText(getActivity(), "Proximity sensor ready!", Toast.LENGTH_LONG).show();
 
         } else {
             Toast.makeText(getActivity(), "Proximitysensor not avaiable", Toast.LENGTH_LONG).show();
         }
-
-//        registerListeners(); //todo REMOVE THIS METHOD FOR MAIN PROGRAM
         createGameInfoAlertDialog();
         return view;
 
@@ -120,7 +112,7 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
         GameInfoAlertDialogFragment gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Whack A Mole");
         gameInfoDialog.setText(getResources().getString(R.string.whack_a_mole));
-        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
+//        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Whack A Mole");
     }
 
@@ -152,6 +144,9 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
             playWhackSound(event, true);
 
         } else if (event.values[0] == 0 && moleIsVisible == false) {
+            pointCounter = pointCounter - MINUS_POINT;
+            if (pointCounter < 0) pointCounter = 0;
+            tvPoints.setText(String.valueOf(pointCounter));
             playWhackSound(event, false);
 
         }
@@ -179,16 +174,6 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
             mMediaPlayer.start();
 
         }
-    }
-
-    /**
-     * todo REMOVE METHOD FOR MAIN PROGRAM
-     * Registeres the listener for the custom button.
-     */
-
-    public void registerListeners() {
-        btnStart.setOnClickListener(new btnStartListener());
-
     }
 
     /**
@@ -226,20 +211,6 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
     }
 
     /**
-     * todo REMOVE METHOD IN MAIN PROGRAM
-     * Inner class that handles the onClick.
-     */
-
-    private class btnStartListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            reset();
-            start();
-
-        }
-    }
-
-    /**
      * Method that is called that starts the game from MainActivity.
      */
 
@@ -259,15 +230,6 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
 
     public void stop() {
         mGameWorker = null;
-//        ivFinalScore.setVisibility(View.VISIBLE);
-//        ivFinalScore.setAnimation(mFallInAnim);
-//
-//        btnStart.setVisibility(View.VISIBLE);
-//        btnStart.setAnimation(mFallUpAnim);
-//
-//        tvFinalScore.setText(String.valueOf(pointCounter));
-//        tvFinalScore.setAnimation(mFallInAnim);
-//        tvPoints.setText("");
         running = false;
         animation.interrupt();
         createGameStopAlertDialog();
@@ -284,19 +246,6 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
 
     public int getScore() {
         return pointCounter;
-
-    }
-
-    /**
-     * Resets the score when method is called from MainActivty.
-     */
-
-    public void reset() {
-        pointCounter = 0;
-        rounds = 0;
-        ivFinalScore.setVisibility(View.INVISIBLE);
-        tvFinalScore.setText("");
-        tvPoints.setText("0");
 
     }
 
@@ -351,8 +300,6 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
 
             }
             rounds = 0;
-//            terminateGameWorker();
-
         }
 
         /**
@@ -366,21 +313,6 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
                 @Override
                 public void run() {
                     ivMole.setImageResource(res);
-
-                }
-            });
-        }
-
-        /**
-         * Method that terminates the gameWorker when the stop-method is called.
-         */
-
-        public void terminateGameWorker() {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getActivity(), "Thread terminated", Toast.LENGTH_LONG).show();
-                    stop();
 
                 }
             });
