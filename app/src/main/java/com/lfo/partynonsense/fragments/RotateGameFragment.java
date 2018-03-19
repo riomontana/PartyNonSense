@@ -89,7 +89,7 @@ public class RotateGameFragment extends Fragment implements FragmentTemplate, Se
         GameInfoAlertDialogFragment gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Spinner!");
         gameInfoDialog.setText(getResources().getString(R.string.rotate_game_info));
-//        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
+        gameInfoDialog.setImageResource(R.drawable.rotate_game);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Spinner");
     }
 
