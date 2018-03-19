@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">Party Nonsense</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="rotate_game_info">Hold your phone verticaly in front of you.
-        Rotate yourself and the phone in the direction and as many degrees as indicated.
-        When you feel that you are at the correct degrees move your hand over the whole screen.</string>
-    <string name="whack_a_mole">"This is the whack-a-mole game! Your objective is to whack the little squirrel-like mole popping up on your screen. Near your camera on your phone is the proximity sensor. To make the sensor fire, you need to cover the sensor with your hand as close as you can which will simulate a ’whack’. But do it fast, you must make the ’whack’ while the mole is visible - otherwise you miss and don’t get any points! Best of luck."</string>
-    <string name="amplitude_game">"Match the volume on the top bar for as long as possible by inputting sound through the microphone. When the volume is in proper range, the meter turns green and the bar on the bottom fills up with points. When the bar is filled a bonus is rewarded and a new volume is set. Try to fill the bar as many times as possible, Good Luck!"</string>
+
+    <string name="rotate_game_info">
+        "1. Hold your phone in front of you.\n2. Rotate in the direction and degrees as instructed.\n3. Move your hand over the earpiece to lock guess.\n"
+    </string>
+    <string name="whack_a_mole">
+        "1. Wait for the mole to appear.\n2. Whack your hand over the earpiece of the phone.\n3. Don't miss!\n"
+    </string>
+    <string name="amplitude_game">
+        "1. Try to match the volume of the top bar.\n2. When the bar turns green hold that volume to fill the bottom blue bar.\n3. Fill as many bars as possible.\n"
+    </string>
+    <string name="ball_game">
+        "1.Hold your phone vertical and use it as a balancing board.\n2. Catch as many stars you can before the times up.\n3. Catching several stars in a row gives you a pointsmultiplier.\n4. Touch the edges and lose your pointsmultiplier.\n"
+    </string>
 </resources>

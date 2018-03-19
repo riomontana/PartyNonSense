@@ -296,7 +296,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
         for (int i = 0; i < nbrOfPlayers; i++) {
-            playerTvs[i].setText(" " + String.valueOf(entries.get(i).getKey()) + " , " + (entries.get(i).getValue()));
+            playerTvs[i].setText(" " + String.valueOf(entries.get(i).getKey()) + " , " + (entries.get(i).getValue())+" points");
 //            playerTvs[i].setText("  " + playerScore.keySet().toArray()[i].toString() + ", " + playerScore.get(playerScore.keySet().toArray()[i].toString()) + "p");
         }
         Button closeBtn = playerView.findViewById(R.id.close);

@@ -33,7 +33,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     private Integer score;
     private GameInfoAlertDialogFragment gameInfoDialog;
     private GameStopAlertDialog gameStopAlertDialog;
-    private static final String gameInfo = "Hold your phone verticaly and use it as a balancing board. The ball rolls in the directions you're tilting the phone use this to catch as many stars you can before the times up. Catching several stars in a row gives you a pointsmultiplier. Touching the edges makes you lose your pointsmultiplier";
+
     public BallGameFragment() {
         // Required empty public constructor
     }
@@ -78,7 +78,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     public void createGameInfoAlertDialog() {
         gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Catch the stars");
-        gameInfoDialog.setText(gameInfo);
+        gameInfoDialog.setText(getResources().getString(R.string.ball_game));
         gameInfoDialog.setImageResource(R.drawable.ball_game);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Catch the stars");
     }
