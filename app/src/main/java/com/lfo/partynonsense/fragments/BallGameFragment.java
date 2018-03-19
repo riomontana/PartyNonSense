@@ -79,6 +79,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Catch the stars");
         gameInfoDialog.setText(gameInfo);
+        gameInfoDialog.setImageResource(R.drawable.ball_game);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Catch the stars");
     }
 
@@ -94,11 +95,13 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
 
     public void onResume() {
         super.onResume();
+        sensorManager.registerListener(sensorListener, sensor,SensorManager.SENSOR_DELAY_GAME);
     }
     @Override
 
     public void onPause() {
         super.onPause();
+        sensorManager.unregisterListener(sensorListener);
     }
 
     public void onDestroy() {
@@ -109,8 +112,8 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     }
 
     public void start() {
-        sensorManager.registerListener(sensorListener, sensor,
-                SensorManager.SENSOR_DELAY_GAME);
+//        sensorManager.registerListener(sensorListener, sensor,
+//                SensorManager.SENSOR_DELAY_GAME);
     }
     public void stop() {
         if(sensorListener!= null) {
@@ -123,7 +126,4 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         return score;
     }
 
-    public void reset() {
-
-    }
 }

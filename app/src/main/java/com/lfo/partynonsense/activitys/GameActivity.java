@@ -1,6 +1,8 @@
 package com.lfo.partynonsense.activitys;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,9 +11,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
@@ -22,8 +26,12 @@ import com.lfo.partynonsense.fragments.WhackAMoleFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -72,7 +80,7 @@ public class GameActivity extends AppCompatActivity {
         for (String player : playerNames) {
             playerScore.put(player, 0);
         }
-    fragmentManager= getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         initTopbar();
         randomGames();
 
@@ -239,31 +247,57 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void showScores(){
+    private void showScores() {
         final AlertDialog.Builder playerBuilder = new AlertDialog.Builder(GameActivity.this);
         final View playerView = getLayoutInflater().inflate(R.layout.score_layout, null);
-        playerBuilder.setTitle("Score");
+        TextView title = new TextView(this);
+        title.setText("Score");
+        title.setGravity(Gravity.CENTER);
+        title.setTextSize(24);
+        title.setTextColor(Color.BLACK);
+        playerBuilder.setCustomTitle(title);
         playerBuilder.setView(playerView);
         TextView[] playerTvs = new TextView[4];
         playerTvs[0] = playerView.findViewById(R.id.player1);
         playerTvs[1] = playerView.findViewById(R.id.player2);
         playerTvs[2] = playerView.findViewById(R.id.player3);
         playerTvs[3] = playerView.findViewById(R.id.player4);
-        if(nbrOfPlayers == 1){
+        ImageView[] playerIvs = new ImageView[4];
+        playerIvs[0] = playerView.findViewById(R.id.medal1);
+        playerIvs[1] = playerView.findViewById(R.id.medal2);
+        playerIvs[2] = playerView.findViewById(R.id.medal3);
+        playerIvs[3] = playerView.findViewById(R.id.medal4);
+        if (nbrOfPlayers == 1) {
             playerTvs[1].setVisibility(View.GONE);
             playerTvs[2].setVisibility(View.GONE);
             playerTvs[3].setVisibility(View.GONE);
-        }else if(nbrOfPlayers == 2){
+            playerIvs[1].setVisibility(View.GONE);
+            playerIvs[2].setVisibility(View.GONE);
+            playerIvs[3].setVisibility(View.GONE);
+        } else if (nbrOfPlayers == 2) {
             playerTvs[2].setVisibility(View.GONE);
             playerTvs[3].setVisibility(View.GONE);
-        }else if(nbrOfPlayers == 3){
+            playerIvs[2].setVisibility(View.GONE);
+            playerIvs[3].setVisibility(View.GONE);
+        } else if (nbrOfPlayers == 3) {
             playerTvs[3].setVisibility(View.GONE);
-        }else{
+            playerIvs[3].setVisibility(View.GONE);
+        } else {
         }
         final AlertDialog dialog = playerBuilder.create();
         dialog.show();
-        for(int i = 0; i < nbrOfPlayers; i++){
-            playerTvs[i].setText("Player "+ (i+1) + ": " + playerScore.keySet().toArray()[i].toString() + ", "+playerScore.get(playerScore.keySet().toArray()[i].toString()) + "p");
+
+        List<Map.Entry<String, Integer>> entries =
+                new ArrayList<Map.Entry<String, Integer>>(playerScore.entrySet());
+        Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> a, Map.Entry<String, Integer> b) {
+                return b.getValue().compareTo(a.getValue());
+            }
+        });
+
+        for (int i = 0; i < nbrOfPlayers; i++) {
+            playerTvs[i].setText(" " + String.valueOf(entries.get(i).getKey()) + " , " + (entries.get(i).getValue()));
+//            playerTvs[i].setText("  " + playerScore.keySet().toArray()[i].toString() + ", " + playerScore.get(playerScore.keySet().toArray()[i].toString()) + "p");
         }
         Button closeBtn = playerView.findViewById(R.id.close);
         closeBtn.setOnClickListener(new View.OnClickListener() {
@@ -276,7 +310,7 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private void closeActivity(){
+    private void closeActivity() {
         this.finish();
     }
 

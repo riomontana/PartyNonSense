@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PartyNonSense</string>
+    <string name="app_name">Party Nonsense</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -7,4 +7,5 @@
         Rotate yourself and the phone in the direction and as many degrees as indicated.
         When you feel that you are at the correct degrees move your hand over the whole screen.</string>
     <string name="whack_a_mole">"This is the whack-a-mole game! Your objective is to whack the little squirrel-like mole popping up on your screen. Near your camera on your phone is the proximity sensor. To make the sensor fire, you need to cover the sensor with your hand as close as you can which will simulate a ’whack’. But do it fast, you must make the ’whack’ while the mole is visible - otherwise you miss and don’t get any points! Best of luck."</string>
+    <string name="amplitude_game">"Match the volume on the top bar for as long as possible by inputting sound through the microphone. When the volume is in proper range, the meter turns green and the bar on the bottom fills up with points. When the bar is filled a bonus is rewarded and a new volume is set. Try to fill the bar as many times as possible, Good Luck!"</string>
 </resources>
