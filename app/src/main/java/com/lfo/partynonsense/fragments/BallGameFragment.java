@@ -79,6 +79,7 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Catch the stars");
         gameInfoDialog.setText(gameInfo);
+        gameInfoDialog.setImageResource(R.drawable.ball_game);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Catch the stars");
     }
 
