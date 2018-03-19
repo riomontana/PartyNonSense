@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lfo.partynonsense.HighscoreDatabase;
 import com.lfo.partynonsense.fragments.AmplitudeGameFragment;
 import com.lfo.partynonsense.R;
 import com.lfo.partynonsense.fragments.BallGameFragment;
@@ -59,6 +60,7 @@ public class GameActivity extends AppCompatActivity {
     private int currentPlayer = 0;
     private int currentGame = 0;
     private FragmentManager fragmentManager;
+    private HighscoreDatabase highscoreDB;
     private ArrayList<Integer> gameFragmentsList = new ArrayList<>();
 
     private RotateGameFragment rotateGameFragment;
@@ -80,6 +82,9 @@ public class GameActivity extends AppCompatActivity {
         for (String player : playerNames) {
             playerScore.put(player, 0);
         }
+
+
+        highscoreDB = new HighscoreDatabase(this);
         fragmentManager = getSupportFragmentManager();
         initTopbar();
         randomGames();
@@ -296,7 +301,10 @@ public class GameActivity extends AppCompatActivity {
         });
 
         for (int i = 0; i < nbrOfPlayers; i++) {
-            playerTvs[i].setText(" " + String.valueOf(entries.get(i).getKey()) + " , " + (entries.get(i).getValue())+" points");
+
+            highscoreDB.addPlayer(String.valueOf(entries.get(i).getKey()));
+            highscoreDB.addScore(highscoreDB.getPlayerID(String.valueOf(entries.get(i).getKey())), entries.get(i).getValue());
+            playerTvs[i].setText(" " + String.valueOf(entries.get(i).getKey()) + " , " + (entries.get(i).getValue()));
 //            playerTvs[i].setText("  " + playerScore.keySet().toArray()[i].toString() + ", " + playerScore.get(playerScore.keySet().toArray()[i].toString()) + "p");
         }
         Button closeBtn = playerView.findViewById(R.id.close);

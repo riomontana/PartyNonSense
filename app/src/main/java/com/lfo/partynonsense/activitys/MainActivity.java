@@ -56,12 +56,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         highscoreDB = new HighscoreDatabase(this);
-
-        highscoreDB.addPlayer("Winner");
-        highscoreDB.addScore(highscoreDB.getPlayerID("Winner"), 100);
-
         currentPlayers = findViewById(R.id.currentPlayers);
         currentPlayers.setText("Current players: " + nbrPlayers);
+
         Button playBtn = (Button) findViewById(R.id.playBtn);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         int hsNav = 0;
         for(HighscoreModel entries : highscoreListDB) {
             highscoreList[hsNav].setText((hsNav+1) + ". " + entries.player + " " + entries.score + " points" );
+            hsNav++;
         }
         dialog.show();
     }
