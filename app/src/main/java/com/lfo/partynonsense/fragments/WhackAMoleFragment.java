@@ -112,7 +112,7 @@ public class WhackAMoleFragment extends Fragment implements SensorEventListener 
         GameInfoAlertDialogFragment gameInfoDialog = new GameInfoAlertDialogFragment();
         gameInfoDialog.setTitle("Whack A Mole");
         gameInfoDialog.setText(getResources().getString(R.string.whack_a_mole));
-        gameInfoDialog.setImageResource(R.drawable.whack_a_mole);
+//        gameInfoDialog.setImageResource(R.drawable.how_to_volumegame);
         gameInfoDialog.show(getActivity().getFragmentManager(), "Whack A Mole");
     }
 
