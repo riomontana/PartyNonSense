@@ -94,8 +94,10 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
 
     public void onResume() {
         super.onResume();
+        sensorManager.registerListener(sensorListener, sensor,SensorManager.SENSOR_DELAY_GAME);
     }
     @Override
+
     public void onPause() {
         super.onPause();
         sensorManager.unregisterListener(sensorListener);
@@ -109,8 +111,8 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
     }
 
     public void start() {
-        sensorManager.registerListener(sensorListener, sensor,
-                SensorManager.SENSOR_DELAY_GAME);
+//        sensorManager.registerListener(sensorListener, sensor,
+//                SensorManager.SENSOR_DELAY_GAME);
     }
     public void stop() {
         if(sensorListener!= null) {
@@ -123,7 +125,4 @@ public class BallGameFragment extends Fragment implements FragmentTemplate {
         return score;
     }
 
-    public void reset() {
-
-    }
 }

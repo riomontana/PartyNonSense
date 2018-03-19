@@ -61,7 +61,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.lfo.partynonsense.fragments.TestFragment"
+        android:name="com.lfo.partynonsense.fragments.BlankFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
